@@ -1,4 +1,4 @@
-package cvModel;
+package com.qa.cv.Model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,10 +17,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
@@ -33,9 +37,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private Long cvId;
 
-		@ManyToOne
-		@JoinColumn(name = "userID")
-		private Long userID;
+		@ManyToOne(fetch = FetchType.LAZY, optional = false)
+		@JoinColumn(name = "userID", nullable = false)
+		@OnDelete(action = OnDeleteAction.CASCADE)
+		@JsonIgnore
+		private UsersDataModel userID;
 
 		@NotBlank
 		private String cvLink;
@@ -53,12 +59,21 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 		@NotBlank
 		private String status;
 		
-		@ManyToOne
-		@JoinColumn(name = "departmentID")
-		private Integer departmentID;
+		@ManyToOne(fetch = FetchType.LAZY, optional = false)
+		@JoinColumn(name = "departmentID", nullable = false)
+		@OnDelete(action = OnDeleteAction.CASCADE)
+		@JsonIgnore
+		private DepartmentModel departmentID;
 
 		public CvModel() {
 
+		}
+
+		public CvModel(UsersDataModel i, String cvLink, String status, DepartmentModel departmentID) {
+			this.userID = i;
+			this.cvLink = cvLink;
+			this.status = status;
+			this.departmentID = departmentID;
 		}
 
 		public Long getCvId() {
@@ -69,11 +84,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 			this.cvId = cvId;
 		}
 
-		public Long getUserID() {
+		public UsersDataModel getUserID() {
 			return userID;
 		}
 
-		public void setUserID(Long userID) {
+		public void setUserID(UsersDataModel userID) {
 			this.userID = userID;
 		}
 
@@ -101,13 +116,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 			this.status = status;
 		}
 
-		public Integer getDepartmentID() {
+		public DepartmentModel getDepartmentID() {
 			return departmentID;
 		}
 
-		public void setDepartmentID(Integer departmentID) {
+		public void setDepartmentID(DepartmentModel departmentID) {
 			this.departmentID = departmentID;
 		}
-		
+
 
 }

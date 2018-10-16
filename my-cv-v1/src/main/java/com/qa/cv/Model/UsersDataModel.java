@@ -1,17 +1,23 @@
-package cvModel;
+package com.qa.cv.Model;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import javax.persistence.*;
-import javax.persistence.TemporalType;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Users")
@@ -32,11 +38,13 @@ public class UsersDataModel implements Serializable {
 	private String email;
 
 	@NotBlank
-	private Integer password;
+	private String password;
 	
-	@ManyToOne
-	@JoinColumn(name = "departmentID")
-	private Integer departmentID;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "departmentID", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private DepartmentModel departmentID;
 
 	public UsersDataModel() {
 
@@ -74,19 +82,19 @@ public class UsersDataModel implements Serializable {
 		this.email = email;
 	}
 
-	public Integer getPassword() {
+	public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(Integer password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
 
-	public Integer getDepartmentID() {
+	public DepartmentModel getDepartmentID() {
 		return departmentID;
 	}
 
-	public void setDepartmentID(Integer departmentID) {
+	public void setDepartmentID(DepartmentModel departmentID) {
 		this.departmentID = departmentID;
 	}
 	
