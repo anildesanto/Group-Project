@@ -29,7 +29,6 @@ public class UserRepositoryTest {
 	@Test
 	public void retrieveByIdTest() {
 		DepartmentModel departmentObj = new DepartmentModel("Big Boss");
-		
 		UsersDataModel userModelTest = new UsersDataModel("Jon", "Snow", "js@gmail.com", "password", departmentObj );
 		entityManager.persist(userModelTest);
 		entityManager.flush();

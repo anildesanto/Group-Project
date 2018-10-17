@@ -1,6 +1,7 @@
 package com.qa.cv.Controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.qa.cv.Exceptions.ResourceNotFoundException;
 import com.qa.cv.Model.CvModel;
-import com.qa.cv.Model.DepartmentModel;
 import com.qa.cv.Model.UsersDataModel;
 import com.qa.cv.Repositories.CvRepository;
 import com.qa.cv.Repositories.DepartmentRepository;
@@ -51,9 +51,12 @@ public class CvController {
 	}
 	
 	//Method to Get a Cv
-	@GetMapping("/cv/{id}")
-	public CvModel getCvbyID(@PathVariable(value = "id")Long cvID) {
-		return cvRepository.findById(cvID).orElseThrow(()-> new ResourceNotFoundException("CvModel", "id", cvID));
+	@GetMapping("/cv/{cvid}")
+	public CvModel getCvbyID(@PathVariable(value = "cvid")Long cvId) {
+		Optional<CvModel> cv = cvRepository.findById(cvId);
+		System.out.println(cv.get().getUserId().getUserId().toString());
+		
+		return cvRepository.findById(cvId).orElseThrow(()-> new ResourceNotFoundException("CvModel", "id", cvId));
 	}
 	
 	// Method to Get all Cvs for a given user
@@ -99,9 +102,6 @@ public class CvController {
 				cvRepository.delete(cv);
 				return ResponseEntity.ok().build();
 						}).orElseThrow(() -> new ResourceNotFoundException("UserId", userId.toString(), null));
-
-		
-
 		}
 	
 }

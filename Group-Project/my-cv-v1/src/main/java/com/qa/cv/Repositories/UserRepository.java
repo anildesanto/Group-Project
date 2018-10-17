@@ -14,6 +14,11 @@ public interface UserRepository extends JpaRepository <UsersDataModel,Long>{
 	Page<UsersDataModel> findByDepartmentId(DepartmentModel departmentId, Pageable pageable);
 
 	Page<UsersDataModel> findByEmail(String email, Pageable pageable);
+
+	Page<UsersDataModel> findByPassword(String password, Pageable pageable);
+
+	Page<UsersDataModel> findByUserId(Long userId, Pageable pageable);
+
 	
 
 }

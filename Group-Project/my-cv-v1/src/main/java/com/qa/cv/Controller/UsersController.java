@@ -45,33 +45,17 @@ public class UsersController {
 			}).orElseThrow(() -> new ResourceNotFoundException("Department", "id", usersDataModel));				
 	}
 
-/*	// Method to Get a user
-	@GetMapping("department/{departmentId}/user/{userId}")
-	public UsersDataModel getUserbyID(@PathVariable(value = "departmentId") Long departmentId,
-			@PathVariable(value = "userId") Long userId,
-			@Valid @RequestBody UsersDataModel usersDataModel) {
-		
-		if(!departmentRepository.existsById(departmentId)) {
-			throw new ResourceNotFoundException("Department", "id", usersDataModel);
-		}
-		return userRepository.findById(userId).map( user -> {
-			user.getFirstName();
-			user.getLastName();
-			user.getEmail();
-			return userRepository.save(user);
-		}).orElseThrow(() -> new ResourceNotFoundException("User", "id", usersDataModel));
-	}*/
-
-/*	@GetMapping("/user/{userID]")
-	public UsersDataModel getUser(@PathVariable (value= "userID") Long userId) {
+	// Method to get a user
+	@GetMapping("/user/{userId}")
+	public UsersDataModel getUserByUserId(@PathVariable(value = "userId") Long userId,
+			 Pageable pageable)
+	{	
 		Optional<UsersDataModel> user = userRepository.findById(userId);
-		if(!user.isPresent()) {
-			throw new ResourceNotFoundException("User", "Id", null);
-		}
-		return user.get();
-	}*/
+		System.out.println(user.get().getDepartmentId().getDepartmentId().toString());
+		return userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("UserModel", "id", userId));
+	}
 	
-	//Method to get user with email and password
+	//Method to get user with email and password (Log in)
 	@GetMapping("/user/{email}&{password}")
 	public Page<UsersDataModel> getAllUsersByEmail(@PathVariable(value = "email") String email,
 			@PathVariable(value = "password") String password, Pageable pageable){	
@@ -80,16 +64,15 @@ public class UsersController {
 		if(!user.getContent().get(0).getPassword().toString().equals(password)) {
 			throw new ResourceNotFoundException(email, email, null);
 		}
-		System.out.println(user.getContent().get(0).getPassword().toString());
-		return userRepository.findByEmail(email, pageable);
 		
+		return userRepository.findByEmail(email, pageable);	
 	}
-	
 	
 	// Method to Get all Users in a given department
 	@GetMapping("/department/{departmentId}/user")
 	public Page<UsersDataModel> getAllUsersByDepartmentId(@PathVariable(value = "departmentId") DepartmentModel departmentId,
-			Pageable pageable) {
+			Pageable pageable)
+	{
 		return userRepository.findByDepartmentId(departmentId, pageable);
 	}
 	
@@ -118,8 +101,6 @@ public class UsersController {
 		}).orElseThrow(() -> new ResourceNotFoundException("User", "id", userRequest));
 	}
 
-
-
 	// Method to remove a user
 	@DeleteMapping("/department/{departmentId}/user/{userId}")
 	public ResponseEntity<?> deleteUser(@PathVariable(value = "departmentId") Long departmentId,
@@ -133,9 +114,7 @@ public class UsersController {
 			userRepository.delete(user);
 			return ResponseEntity.ok().build();
 					}).orElseThrow(() -> new ResourceNotFoundException("UserId", userId.toString(), null));
-
 	
-
 	}
 
 }
