@@ -25,48 +25,49 @@ public class DepartmentController {
 
 	@Autowired
 	DepartmentRepository departmentRepository;
-	
-	//Method to Post to Departments
+
+	// Method to Post to Departments
 	@PostMapping("/department")
 	public DepartmentModel createdepartment(@Valid @RequestBody DepartmentModel mSDM) {
 		return departmentRepository.save(mSDM);
 	}
-	
-	//Method to Get a Department
+
+	// Method to Get a Department
 	@GetMapping("/department/{id}")
-	public DepartmentModel getDepartmentbyID(@PathVariable(value = "id")Long departmentID) {
-		return departmentRepository.findById(departmentID).orElseThrow(()-> new ResourceNotFoundException("DepartmentModel", "id", departmentID));
+	public DepartmentModel getDepartmentbyID(@PathVariable(value = "id") Long departmentID) {
+		return departmentRepository.findById(departmentID)
+				.orElseThrow(() -> new ResourceNotFoundException("DepartmentModel", "id", departmentID));
 	}
-	
-	//Method to Get all Departments
+
+	// Method to Get all Departments
 	@GetMapping("/department")
-	public List<DepartmentModel> getAllDepartment(){
+	public List<DepartmentModel> getAllDepartment() {
 		return departmentRepository.findAll();
 	}
-	
-	//Method to Edit a Department
+
+	// Method to Edit a Department
 	@PutMapping("/department/{id}")
 	public DepartmentModel updateDepartment(@PathVariable(value = "id") Long departmentID,
 			@Valid @RequestBody DepartmentModel departmentDetails) {
-		
-		DepartmentModel mSDM = departmentRepository.findById(departmentID).orElseThrow(() -> new ResourceNotFoundException("Department", "id", departmentID));
-		
+
+		DepartmentModel mSDM = departmentRepository.findById(departmentID)
+				.orElseThrow(() -> new ResourceNotFoundException("Department", "id", departmentID));
+
 		mSDM.setRole(departmentDetails.getRole());
-		
+
 		DepartmentModel updateData = departmentRepository.save(mSDM);
 		return updateData;
 	}
-		
-	//Method to remove a department
+
+	// Method to remove a department
 	@DeleteMapping("department/{id}")
-	public ResponseEntity<?> deleteDepartment(@PathVariable(value ="id")Long departmentID){
-		DepartmentModel mSDM = departmentRepository.findById(departmentID).orElseThrow(() -> new ResourceNotFoundException("Department", "id", departmentID));
-		
+	public ResponseEntity<?> deleteDepartment(@PathVariable(value = "id") Long departmentID) {
+		DepartmentModel mSDM = departmentRepository.findById(departmentID)
+				.orElseThrow(() -> new ResourceNotFoundException("Department", "id", departmentID));
+
 		departmentRepository.delete(mSDM);
 		return ResponseEntity.ok().build();
-		
-	
-		
+
 	}
-	
+
 }

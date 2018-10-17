@@ -39,15 +39,23 @@ public class UsersDataModel implements Serializable {
 
 	@NotBlank
 	private String password;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "departmentID", nullable = false)
+	@JoinColumn(name = "departmentId", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
-	private DepartmentModel departmentID;
+	private DepartmentModel departmentId;
 
 	public UsersDataModel() {
 
+	}
+
+	public UsersDataModel(String firstName, String lastName, String email, String password,
+			DepartmentModel departmentId) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
 	}
 
 	public Long getUserId() {
@@ -90,14 +98,12 @@ public class UsersDataModel implements Serializable {
 		this.password = password;
 	}
 
-	public DepartmentModel getDepartmentID() {
-		return departmentID;
+	public DepartmentModel getDepartmentId() {
+		return departmentId;
 	}
 
-	public void setDepartmentID(DepartmentModel departmentID) {
-		this.departmentID = departmentID;
+	public void setDepartmentID(DepartmentModel departmentId) {
+		this.departmentId = departmentId;
 	}
-	
-	
 
 }

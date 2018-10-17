@@ -27,9 +27,9 @@ public class DepartmentRepositoryTest {
 
 	@Test
 	public void retrieveByIdTest() {
-		DepartmentModel model1 = new DepartmentModel("Big Boss");
-		entityManager.persist(model1);
+		DepartmentModel departmentModelTest = new DepartmentModel("Big Boss");
+		entityManager.persist(departmentModelTest);
 		entityManager.flush();
-		assertTrue(departmentRepo.findById(model1.getDepartmentID()).isPresent());
+		assertTrue(departmentRepo.findById(departmentModelTest.getDepartmentId()).isPresent());
 	}
 }

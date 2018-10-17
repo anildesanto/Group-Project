@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.qa.cv.Model.DepartmentModel;
 
 @Repository
-public interface DepartmentRepository extends JpaRepository<DepartmentModel,Long> {
+public interface DepartmentRepository extends JpaRepository<DepartmentModel, Long> {
 
 }

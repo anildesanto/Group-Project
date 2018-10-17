@@ -26,103 +26,87 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@Entity
+@Table(name = "CV")
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = { "creationDate", "lastModified" }, allowGetters = true)
+public class CvModel implements Serializable {
 
-	@Entity
-	@Table(name = "CV")
-	@EntityListeners(AuditingEntityListener.class)
-	@JsonIgnoreProperties(value =  {"creationDate", "lastModified"}, allowGetters =true)
-	public class CvModel implements Serializable {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long cvId;
 
-		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
-		private Long cvId;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "userID", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private UsersDataModel userId;
 
-		@ManyToOne(fetch = FetchType.LAZY, optional = false)
-		@JoinColumn(name = "userID", nullable = false)
-		@OnDelete(action = OnDeleteAction.CASCADE)
-		@JsonIgnore
-		private UsersDataModel userID;
+	@NotBlank
+	private String cvLink;
 
-		@NotBlank
-		private String cvLink;
+	@Column(nullable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
+	private Date creationDate;
 
-		@Column(nullable = false, updatable=false)
-		@Temporal(TemporalType.TIMESTAMP)
-		@CreatedDate
-		private Date creationDate;
-		
-		@Column(nullable = false, updatable = false)
-		@Temporal(TemporalType.TIMESTAMP)
-		@LastModifiedDate
-		private Date lastModified;
-		
-		@NotBlank
-		private String status;
-		
-		@ManyToOne(fetch = FetchType.LAZY, optional = false)
-		@JoinColumn(name = "departmentID", nullable = false)
-		@OnDelete(action = OnDeleteAction.CASCADE)
-		@JsonIgnore
-		private DepartmentModel departmentID;
+	@Column(nullable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	@LastModifiedDate
+	private Date lastModified;
 
-		public CvModel() {
+	@NotBlank
+	private String status;
 
-		}
+	public CvModel() {
 
-		public CvModel(UsersDataModel i, String cvLink, String status, DepartmentModel departmentID) {
-			this.userID = i;
-			this.cvLink = cvLink;
-			this.status = status;
-			this.departmentID = departmentID;
-		}
+	}
 
-		public Long getCvId() {
-			return cvId;
-		}
+	public CvModel(UsersDataModel i, String cvLink, String status) {
+		this.userId = i;
+		this.cvLink = cvLink;
+		this.status = status;
 
-		public void setCvId(Long cvId) {
-			this.cvId = cvId;
-		}
+	}
 
-		public UsersDataModel getUserID() {
-			return userID;
-		}
+	public Long getCvId() {
+		return cvId;
+	}
 
-		public void setUserID(UsersDataModel userID) {
-			this.userID = userID;
-		}
+	public void setCvId(Long cvId) {
+		this.cvId = cvId;
+	}
 
-		public String getCvLink() {
-			return cvLink;
-		}
+	public UsersDataModel getUserId() {
+		return userId;
+	}
 
-		public void setCvLink(String cvLink) {
-			this.cvLink = cvLink;
-		}
+	public void setUserId(UsersDataModel userId) {
+		this.userId = userId;
+	}
 
-		public Date getCreationDate() {
-			return creationDate;
-		}
+	public String getCvLink() {
+		return cvLink;
+	}
 
-		public void setCreationDate(Date creationDate) {
-			this.creationDate = creationDate;
-		}
+	public void setCvLink(String cvLink) {
+		this.cvLink = cvLink;
+	}
 
-		public String getStatus() {
-			return status;
-		}
+	public Date getCreationDate() {
+		return creationDate;
+	}
 
-		public void setStatus(String status) {
-			this.status = status;
-		}
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
 
-		public DepartmentModel getDepartmentID() {
-			return departmentID;
-		}
+	public String getStatus() {
+		return status;
+	}
 
-		public void setDepartmentID(DepartmentModel departmentID) {
-			this.departmentID = departmentID;
-		}
-
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 }

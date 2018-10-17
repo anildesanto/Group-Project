@@ -19,25 +19,25 @@ public class DepartmentModel implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long departmentID;
+	private Long departmentId;
 
 	@NotBlank
 	private String role;
 
 	public DepartmentModel() {
 
-		}
+	}
 
 	public DepartmentModel(String role) {
 		this.role = role;
 	}
 
-	public Long getDepartmentID() {
-		return departmentID;
+	public Long getDepartmentId() {
+		return departmentId;
 	}
 
-	public void setDepartmentID(Long departmentID) {
-		this.departmentID = departmentID;
+	public void setDepartmentId(Long departmentId) {
+		this.departmentId = departmentId;
 	}
 
 	public String getRole() {
@@ -48,5 +48,4 @@ public class DepartmentModel implements Serializable {
 		this.role = role;
 	}
 
-	
 }
