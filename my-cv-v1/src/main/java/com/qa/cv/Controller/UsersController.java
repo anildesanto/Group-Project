@@ -1,10 +1,10 @@
 package com.qa.cv.Controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,63 +16,91 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.qa.cv.Exceptions.ResourceNotFoundException;
-import com.qa.cv.Model.DepartmentModel;
 import com.qa.cv.Model.UsersDataModel;
+import com.qa.cv.Repositories.DepartmentRepository;
 import com.qa.cv.Repositories.UserRepository;
+
 
 @RestController
 @RequestMapping("api/")
 public class UsersController {
-	
+
 	@Autowired
 	UserRepository userRepository;
-	
-	//Method to Create Users
-	@PostMapping("/user")
-	public UsersDataModel createuser(@Valid @RequestBody UsersDataModel mSDM) {
-		return userRepository.save(mSDM);
+
+	@Autowired
+	DepartmentRepository departmentRepository;
+
+	// Method to Create Users
+	@PostMapping("/department/{departmentId}/user")
+	public UsersDataModel createuser(@PathVariable(value = "departmentId") Long departmentId, @Valid @RequestBody UsersDataModel usersDataModel) {
+		return departmentRepository.findById(departmentId).map( departmentModel -> { 
+			usersDataModel.setDepartmentID(departmentModel);
+			return userRepository.save(usersDataModel);
+			}).orElseThrow(() -> new ResourceNotFoundException("Department", "id", usersDataModel));				
 	}
-	
-	//Method to Get a user
-	@GetMapping("/user/{id}")
-	public UsersDataModel getUserbyID(@PathVariable(value = "id")Long userID) {
-		return userRepository.findById(userID).orElseThrow(()-> new ResourceNotFoundException("UsersDataModel", "id", userID));
+
+	// Method to Get a user
+	@GetMapping("department/{departmentId}/user/{userId}")
+	public UsersDataModel getUserbyID(@PathVariable(value = "departmentId") Long departmentId,
+			@PathVariable(value = "userId") Long userId,
+			@Valid @RequestBody UsersDataModel usersDataModel) {
+		
+		if(!departmentRepository.existsById(departmentId)) {
+			throw new ResourceNotFoundException("Department", "id", usersDataModel);
+		}
+		return userRepository.findById(userId).map( user -> {
+			user.getFirstName();
+			user.getLastName();
+			user.getEmail();
+			return userRepository.save(user);
+		}).orElseThrow(() -> new ResourceNotFoundException("User", "id", usersDataModel));
 	}
-		
-	//Method to Get all Users
-	@GetMapping("/user")
-	public List<UsersDataModel> getAllDepartment(){
-		return userRepository.findAll();
+
+
+	// Method to Get all Users
+	@GetMapping("/department/{departmentId}/users")
+	public Page<UsersDataModel> getAllUsersByDepartmentId(@PathVariable(value = "departmentId") Long departmentId,
+			Pageable pageable) {
+		return userRepository.findByDepartmentId(departmentId, pageable);
 	}
-	
-	//Method to Edit a user
-	@PutMapping("/user/{id}")
-	public UsersDataModel updateUser(@PathVariable(value = "id") Long userID,
-			@Valid @RequestBody UsersDataModel userDetails) {
+
+	// Method to Edit a user
+	@PutMapping("/department/{departmentId}/user/{userId}")
+	public UsersDataModel updateUser(@PathVariable(value = "departmentId") Long departmentId,
+			@PathVariable(value = "userId") Long userId,
+			@Valid @RequestBody UsersDataModel userRequest) {
 		
-		UsersDataModel mSDM = userRepository.findById(userID).orElseThrow(() -> new ResourceNotFoundException("User", "id", userID));
+		if(!departmentRepository.existsById(departmentId)) {
+			throw new ResourceNotFoundException("Department", "id", userRequest);
+		}
 		
-		mSDM.setFirstName(userDetails.getFirstName());
-		mSDM.setLastName(userDetails.getLastName());
-		mSDM.setEmail(userDetails.getEmail());
-		mSDM.setPassword(userDetails.getPassword());
-		mSDM.setDepartmentID(userDetails.getDepartmentID());
-		
-		
-		UsersDataModel updateData = userRepository.save(mSDM);
-		return updateData;
+		return userRepository.findById(userId).map( user -> {
+			user.setFirstName(userRequest.getFirstName());
+			user.setLastName(userRequest.getLastName());
+			user.setEmail(userRequest.getEmail());
+			return userRepository.save(user);
+		}).orElseThrow(() -> new ResourceNotFoundException("User", "id", userRequest));
 	}
+
+
+
+	// Method to remove a user
+	@DeleteMapping("/department/{departmentId}/user/{userId}")
+	public ResponseEntity<?> deleteUser(@PathVariable(value = "departmentId") Long departmentId,
+			@PathVariable(value = "userId") Long userId) {
+		
+		if(!departmentRepository.existsById(departmentId)) {
+			throw new ResourceNotFoundException("Department", "id", departmentId);
+		}
+		
+		return userRepository.findById(userId).map(user -> {
+			userRepository.delete(user);
+			return ResponseEntity.ok().build();
+					}).orElseThrow(() -> new ResourceNotFoundException("UserId", userId.toString(), null));
+
 	
-	//Method to remove a department
-	@DeleteMapping("user/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable(value ="id")Long userID){
-		UsersDataModel mSDM = userRepository.findById(userID).orElseThrow(() -> new ResourceNotFoundException("User", "id", userID));
-		
-		userRepository.delete(mSDM);
-		return ResponseEntity.ok().build();
-		
-	
-		
+
 	}
 
 }

@@ -44,10 +44,18 @@ public class UsersDataModel implements Serializable {
 	@JoinColumn(name = "departmentID", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
-	private DepartmentModel departmentID;
+	private DepartmentModel departmentId;
 
 	public UsersDataModel() {
 
+	}
+
+	public UsersDataModel(String firstName, String lastName, String email, String password, DepartmentModel departmentID) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.departmentId = departmentId;
 	}
 
 	public Long getUserId() {
@@ -90,12 +98,12 @@ public class UsersDataModel implements Serializable {
 		this.password = password;
 	}
 
-	public DepartmentModel getDepartmentID() {
-		return departmentID;
+	public DepartmentModel getDepartmentId() {
+		return departmentId;
 	}
 
-	public void setDepartmentID(DepartmentModel departmentID) {
-		this.departmentID = departmentID;
+	public void setDepartmentID(DepartmentModel departmentId) {
+		this.departmentId = departmentId;
 	}
 	
 	

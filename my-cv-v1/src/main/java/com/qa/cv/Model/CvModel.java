@@ -41,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 		@JoinColumn(name = "userID", nullable = false)
 		@OnDelete(action = OnDeleteAction.CASCADE)
 		@JsonIgnore
-		private UsersDataModel userID;
+		private UsersDataModel userId;
 
 		@NotBlank
 		private String cvLink;
@@ -58,22 +58,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 		
 		@NotBlank
 		private String status;
-		
-		@ManyToOne(fetch = FetchType.LAZY, optional = false)
-		@JoinColumn(name = "departmentID", nullable = false)
-		@OnDelete(action = OnDeleteAction.CASCADE)
-		@JsonIgnore
-		private DepartmentModel departmentID;
 
 		public CvModel() {
 
 		}
 
-		public CvModel(UsersDataModel i, String cvLink, String status, DepartmentModel departmentID) {
-			this.userID = i;
+		public CvModel(UsersDataModel i, String cvLink, String status) {
+			this.userId = i;
 			this.cvLink = cvLink;
 			this.status = status;
-			this.departmentID = departmentID;
+			
 		}
 
 		public Long getCvId() {
@@ -84,12 +78,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 			this.cvId = cvId;
 		}
 
-		public UsersDataModel getUserID() {
-			return userID;
+		public UsersDataModel getUserId() {
+			return userId;
 		}
 
-		public void setUserID(UsersDataModel userID) {
-			this.userID = userID;
+		public void setUserId(UsersDataModel userId) {
+			this.userId = userId;
 		}
 
 		public String getCvLink() {
@@ -116,13 +110,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 			this.status = status;
 		}
 
-		public DepartmentModel getDepartmentID() {
-			return departmentID;
-		}
 
-		public void setDepartmentID(DepartmentModel departmentID) {
-			this.departmentID = departmentID;
-		}
 
 
 }
