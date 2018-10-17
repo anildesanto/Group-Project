@@ -1,0 +1,8 @@
+client=6b482fa8-e2ea-4a21-9bfc-9c1108f08af2
+managementURI=https\://management.core.windows.net/
+authURL=https\://login.microsoftonline.com/
+key=AZURE5c288ed6-4460-44a5-a64c-fd56f50a6ced
+subscription=7801daa4-520b-49d4-a201-f6995595c654
+baseURL=https\://management.azure.com/
+tenant=e8e48569-3930-4e28-8ded-b6f4d114cd6c
+graphURL=https\://graph.windows.net/
