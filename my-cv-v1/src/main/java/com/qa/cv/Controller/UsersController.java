@@ -2,6 +2,7 @@ package com.qa.cv.Controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.qa.cv.Exceptions.ResourceNotFoundException;
-import com.qa.cv.Model.CvModel;
 import com.qa.cv.Model.DepartmentModel;
 import com.qa.cv.Model.UsersDataModel;
 import com.qa.cv.Repositories.DepartmentRepository;
@@ -52,6 +52,29 @@ public class UsersController {
 		System.out.println(user.get().getDepartment().getDepartmentId().toString());
 		return userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("UserModel", "id", userId));
+	}
+	
+	// Method to get a user by name
+	@GetMapping("findbyname/{name}&{lastName}")
+	public List<UsersDataModel> getAllUsersByName(@PathVariable(value = "name") String name,
+			@PathVariable(value = "lastName") String lastName, Pageable pageable) {
+
+		List<UsersDataModel> user = userRepository.findAll();
+		List<UsersDataModel> hi = user.stream().filter(u -> {
+
+			if (u.getFirstName().toLowerCase().startsWith(name.toLowerCase()) & u.getLastName().toLowerCase().startsWith(lastName.toLowerCase())) {
+				return true;
+			}
+			
+			if (lastName.equals("")) {
+
+				if (u.getFirstName().toLowerCase().startsWith(name.toLowerCase()) | u.getLastName().toLowerCase().startsWith(name.toLowerCase())) {
+					return true;
+				}
+			}
+			return false;
+		}).collect(Collectors.toList());
+		return hi;
 	}
 
 	// Method to get user with email and password (Log in)
