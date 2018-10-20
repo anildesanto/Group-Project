@@ -57,7 +57,6 @@ public class UsersDataModel implements Serializable {
 		this.email = email;
 		this.password = password;
 	}
-
 	public Long getUserId() {
 		return userId;
 	}

@@ -19,13 +19,13 @@ import com.qa.cv.Repositories.CvRepository;
 @DataJpaTest
 public class CvRepositoryTest {
 
-
-	@Autowired
-	private TestEntityManager entityManager;
-	
-	@Autowired
-	private CvRepository cvRepo;
-
+//
+//	@Autowired
+//	private TestEntityManager entityManager;
+//	
+//	@Autowired
+//	private CvRepository cvRepo;
+//
 	@Test
 	public void retrieveByIdTest() 
 	{

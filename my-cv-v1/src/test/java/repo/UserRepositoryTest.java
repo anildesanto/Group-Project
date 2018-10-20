@@ -20,19 +20,20 @@ import com.qa.cv.Repositories.UserRepository;
 @DataJpaTest
 public class UserRepositoryTest {
 
-//	@Autowired
-//	private TestEntityManager entityManager;
-//	
-//	@Autowired
-//	private UserRepository userRepo;
-//
+	@Autowired
+	private TestEntityManager entityManager;
+	
+	@Autowired
+	private UserRepository userRepo;
+
 	@Test
 	public void retrieveByIdTest() {
-//		DepartmentModel departmentObj = new DepartmentModel("Big Boss");
-//		UsersDataModel userModelTest = new UsersDataModel("Jon", "Snow", "js@gmail.com", "password", departmentObj );
-//		entityManager.persist(userModelTest);
-//		entityManager.flush();
-//		assertTrue(userRepo.findById(userModelTest.getUserId()).isPresent());
+		DepartmentModel department = new DepartmentModel("Big Boss");
+		UsersDataModel userModelTest = new UsersDataModel("Jon", "Snow", "js@gmail.com", "password", department );
+		entityManager.persist(department);
+		entityManager.persist(userModelTest);
+		entityManager.flush();
+		assertTrue(userRepo.findById(userModelTest.getUserId()).isPresent());
 	}
 
 }

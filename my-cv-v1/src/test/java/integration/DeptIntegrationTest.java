@@ -1,6 +1,7 @@
 package integration;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -42,10 +43,14 @@ public class DeptIntegrationTest {
 	public void findingADepartmentFromDatabase() throws Exception 
 	{
 		departmentRepo.save(new DepartmentModel("Big Boss"));
-		mvc.perform(get("/api/department").contentType(MediaType.APPLICATION_JSON))
+		String id = mvc.perform(get("/api/department").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse().getContentAsString();
+		int index1 = id.indexOf(":") + 1;
+		int index2 = id.indexOf(",");
+		String deptId = id.substring(index1, index2);
+		mvc.perform(get("/api/department/"+deptId).contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk()).andExpect(content()
 				.contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-		.andExpect(jsonPath("$[0].role", is("Big Boss")));
+		.andExpect(jsonPath("$.role", is("Big Boss")));
 	}
 	
 	@Test
@@ -69,6 +74,32 @@ public class DeptIntegrationTest {
 		.content("{\"role\" : \"Little Boss\"}")).andExpect(status()
 				.isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 		.andExpect(jsonPath("$.role", is("Little Boss")));
+	}
+	
+	@Test
+	public void deleteADepartmentFromTheDatabase() throws Exception{
+		departmentRepo.save(new DepartmentModel("Big Boss"));
+		String id = mvc.perform(get("/api/department").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse().getContentAsString();
+		int index1 = id.indexOf(":") + 1;
+		int index2 = id.indexOf(",");
+		String deptId = id.substring(index1, index2);
+		mvc.perform(delete("/api/department/"+deptId).contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void findingAllDepartmentsFromDatabase() throws Exception 
+	{
+		departmentRepo.save( new DepartmentModel("Big Boss"));
+		mvc.perform(MockMvcRequestBuilders.post("/api/department")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"role\" : \"Little Boss\"}"));
+		mvc.perform(get("/api/department").contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isOk()).andExpect(content()
+				.contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$[0].role", is("Big Boss"))).andExpect(status().isOk()).andExpect(content()
+				.contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("$[1].role", is("Little Boss")));
 	}
 
 }
