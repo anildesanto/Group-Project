@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.sql.rowset.serial.SerialBlob;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.OnDelete;
@@ -45,11 +46,22 @@ public class CvModel implements Serializable {
 	private UsersDataModel userId;
 
 	@Lob
-	private Blob cvLink;
+	private SerialBlob cvLink;
 	
 	@NotBlank
 	private String fileType;
 	
+	@NotBlank
+	private String fileName;
+	
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	@Column(nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
@@ -67,7 +79,7 @@ public class CvModel implements Serializable {
 		
 	}
 
-	public CvModel(UsersDataModel userModel, Blob cvLink, String status, String fileType) {
+	public CvModel(UsersDataModel userModel, SerialBlob cvLink, String status, String fileType) {
 		this.userId = userModel;
 		this.cvLink = cvLink;
 		this.status = status;
@@ -96,7 +108,7 @@ public class CvModel implements Serializable {
 		return cvLink;
 	}
 
-	public void setCvLink(Blob cvLink) {
+	public void setCvLink(SerialBlob cvLink) {
 		this.cvLink = cvLink;
 	}
 

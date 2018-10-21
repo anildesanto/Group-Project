@@ -3,6 +3,8 @@ package com.qa.cv.Controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
@@ -54,7 +56,6 @@ public class CvController {
 	@Autowired
 	DepartmentRepository departmentRepository;
 
-	private SessionFactory sessionFactory;
 	// Method to Post a Cv
 	@PostMapping("/user/{userId}/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -65,6 +66,7 @@ public class CvController {
 			
 			cvModel.setStatus("Gray");
 			try {
+				cvModel.setFileName(file.getOriginalFilename());
 				cvModel.setFileType(file.getContentType());
 				cvModel.setUser(userModel);
 				SerialBlob b = new SerialBlob(file.getBytes());
@@ -88,7 +90,8 @@ public class CvController {
 	public void downloadCv(HttpServletResponse response, @PathVariable(value = "cvid") Long cvId) throws IOException, SQLException {
 		Optional<CvModel> cv = cvRepository.findById(cvId);
 		CvModel cvModel = cv.get();
-		response.setContentType(cvModel.getFileType());
+		response.setContentType("application/x-msdownload");            
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + cvModel.getFileName() + "\"");
 		IOUtils.copy(cvModel.getCvLink().getBinaryStream(), response.getOutputStream());
 		response.flushBuffer();
 	}
@@ -107,25 +110,18 @@ public class CvController {
 	// Method to Get all Cvs with a given status
 	@GetMapping("/cv/status/{status}")
 	public Page<CvModel> getAllcvByStatus(@PathVariable(value = "status") String status, Pageable pageable){
-		
 		return cvRepository.findByStatus(status, pageable);
-		
 	}
-
 	// Method to set status/flag of cv 
 	@PutMapping("/cv/{cvId}/status/{status}")
 	public CvModel updateCv(@PathVariable(value = "cvId") Long cvId
 			, @PathVariable(value = "status") String status) throws SerialException, SQLException {
 		CvModel cvModel = cvRepository.findById(cvId).get();
 		cvModel.setStatus(status);
-		SerialBlob b = new SerialBlob(cvModel.getCvLink().getBytes(1l, (int) cvModel.getCvLink().length()));
-		cvModel.setCvLink(b);
+		//SerialBlob b = new SerialBlob(cvModel.getCvLink().getBytes(1l, (int) cvModel.getCvLink().length()));
+		//cvModel.setCvLink(b);
 		return cvRepository.save(cvModel);
 	}
-
-
-	
-
 	// Method to remove a user
 	@DeleteMapping("/cv/{cvId}")
 	public ResponseEntity<?> deleteCv(@PathVariable(value = "cvId") Long cvId) {
