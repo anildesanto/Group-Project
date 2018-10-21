@@ -13,4 +13,8 @@ public interface CvRepository extends JpaRepository<CvModel, Long> {
 
 	Page<CvModel> findByUserId(UsersDataModel userId, Pageable pageable);
 
+	Page<CvModel> findByStatus(String status, Pageable pageable);
+
+
+
 }

@@ -44,7 +44,7 @@ public class UsersDataModel implements Serializable {
 	@JoinColumn(name = "departmentId", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
-	private DepartmentModel department;
+	private DepartmentModel departmentId;
 
 	public UsersDataModel() {
 
@@ -98,15 +98,15 @@ public class UsersDataModel implements Serializable {
 	}
 
 	public DepartmentModel getDepartment() {
-		return department;
+		return departmentId;
 	}
 
 	public void setDepartment(DepartmentModel department) {
-		this.department = department;
+		this.departmentId = department;
 	}
 	public Long getDepartmentId() 
 	{
-		return department.getDepartmentId();
+		return departmentId.getDepartmentId();
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import com.qa.cv.Model.UsersDataModel;
 import com.qa.cv.Repositories.DepartmentRepository;
 import com.qa.cv.Repositories.UserRepository;
 
+@CrossOrigin
 @RestController
 @RequestMapping("api/")
 public class UsersController {
@@ -48,8 +50,6 @@ public class UsersController {
 	// Method to get a user
 	@GetMapping("/user/{userId}")
 	public UsersDataModel getUserByUserId(@PathVariable(value = "userId") Long userId, Pageable pageable) {
-		Optional<UsersDataModel> user = userRepository.findById(userId);
-		System.out.println(user.get().getDepartment().getDepartmentId().toString());
 		return userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("UserModel", "id", userId));
 	}
@@ -60,21 +60,21 @@ public class UsersController {
 			@PathVariable(value = "lastName") String lastName, Pageable pageable) {
 
 		List<UsersDataModel> user = userRepository.findAll();
-		List<UsersDataModel> hi = user.stream().filter(u -> {
-
-			if (u.getFirstName().toLowerCase().startsWith(name.toLowerCase()) & u.getLastName().toLowerCase().startsWith(lastName.toLowerCase())) {
+		user = user.stream().filter(u -> {
+			if (u.getFirstName().toLowerCase().startsWith(name.toLowerCase()) 
+					&& u.getLastName().toLowerCase().startsWith(lastName.toLowerCase())) {
 				return true;
 			}
-			
 			if (lastName.equals("")) {
 
-				if (u.getFirstName().toLowerCase().startsWith(name.toLowerCase()) | u.getLastName().toLowerCase().startsWith(name.toLowerCase())) {
+				if (u.getFirstName().toLowerCase().startsWith(name.toLowerCase()) 
+						|| u.getLastName().toLowerCase().startsWith(name.toLowerCase())) {
 					return true;
 				}
 			}
 			return false;
 		}).collect(Collectors.toList());
-		return hi;
+		return user;
 	}
 
 	// Method to get user with email and password (Log in)
@@ -86,8 +86,7 @@ public class UsersController {
 		if (!user.getContent().get(0).getPassword().toString().equals(password)) {
 			throw new ResourceNotFoundException(email, email, null);
 		}
-
-		return userRepository.findByEmail(email, pageable);
+		return user;
 	}
 
 	// Method to Get all Users in a given department
@@ -104,31 +103,20 @@ public class UsersController {
 	}
 
 	// Method to Edit a user
-	@PutMapping("/department/{departmentId}/user/{userId}")
-	public UsersDataModel updateUser(@PathVariable(value = "departmentId") Long departmentId,
-			@PathVariable(value = "userId") Long userId, @Valid @RequestBody UsersDataModel userRequest) {
-
-		if (!departmentRepository.existsById(departmentId)) {
-			throw new ResourceNotFoundException("Department", "id", userRequest);
-		}
-
+	@PutMapping("/user/{userId}")
+	public UsersDataModel updateUser(@PathVariable(value = "userId") Long userId, @Valid @RequestBody UsersDataModel userRequest) {
 		return userRepository.findById(userId).map(user -> {
 			user.setFirstName(userRequest.getFirstName());
 			user.setLastName(userRequest.getLastName());
 			user.setEmail(userRequest.getEmail());
+			user.setPassword(userRequest.getPassword());
 			return userRepository.save(user);
 		}).orElseThrow(() -> new ResourceNotFoundException("User", "id", userRequest));
 	}
 
 	// Method to remove a user
-	@DeleteMapping("/department/{departmentId}/user/{userId}")
-	public ResponseEntity<?> deleteUser(@PathVariable(value = "departmentId") Long departmentId,
-			@PathVariable(value = "userId") Long userId) {
-
-		if (!departmentRepository.existsById(departmentId)) {
-			throw new ResourceNotFoundException("Department", "id", departmentId);
-		}
-
+	@DeleteMapping("/user/{userId}")
+	public ResponseEntity<?> deleteUser(@PathVariable(value = "userId") Long userId) {
 		return userRepository.findById(userId).map(user -> {
 			userRepository.delete(user);
 			return ResponseEntity.ok().build();

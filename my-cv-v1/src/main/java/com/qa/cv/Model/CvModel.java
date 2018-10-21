@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -38,24 +39,17 @@ public class CvModel implements Serializable {
 	private Long cvId;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "userID", nullable = false)
+	@JoinColumn(name = "userId", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
-	private UsersDataModel user;
+	private UsersDataModel userId;
 
-
+	@Lob
 	private Blob cvLink;
 	
-	public String getFileType() {
-		return fileType;
-	}
-
-	public void setFileType(String fileType) {
-		this.fileType = fileType;
-	}
-
 	@NotBlank
 	private String fileType;
+	
 	@Column(nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
@@ -70,13 +64,14 @@ public class CvModel implements Serializable {
 	private String status;
 
 	public CvModel() {
-
+		
 	}
 
-	public CvModel(UsersDataModel i, Blob cvLink, String status) {
-		this.user = i;
+	public CvModel(UsersDataModel userModel, Blob cvLink, String status, String fileType) {
+		this.userId = userModel;
 		this.cvLink = cvLink;
 		this.status = status;
+		this.fileType = fileType;
 
 	}
 
@@ -89,11 +84,11 @@ public class CvModel implements Serializable {
 	}
 
 	public UsersDataModel getUser() {
-		return user;
+		return userId;
 	}
 
 	public void setUser(UsersDataModel user) {
-		this.user = user;
+		this.userId = user;
 	}
 
 	public Blob getCvLink() 
@@ -123,6 +118,13 @@ public class CvModel implements Serializable {
 
 	public Long getUserId() 
 	{
-		return user.getUserId();
+		return userId.getUserId();
+	}
+	public String getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
 	}
 }
