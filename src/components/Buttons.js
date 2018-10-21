@@ -1,26 +1,38 @@
 import React, { Component } from "react";
 
 class Buttons extends Component {
-  state = {};
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     upload: props.upload
+  //   };
+  // }
+  // state = {};
   render() {
     return (
       <div>
-        {/* <form
+        <form
           action="https://qacvmanager.azurewebsites.net/api/user/1/upload"
           method="post"
           header="file"
           enctype="multipart/form-data"
         >
-          <input type="file" name="file">
-            {" "}
-          </input>
-          <input type="submit" value="upload">
-            {" "}
-          </input>
-        </form> */}
-        <button href="https://qacvmanager.azurewebsites.net/api/cv/3/download">
-          Download CV
-        </button>
+          <input type="file" name="file" />
+
+          <input type="submit" value="Upload" />
+        </form>
+        <a href="https://qacvmanager.azurewebsites.net/api/cv/12/download">
+          Download
+        </a>
+
+        <form
+          action="https://qacvmanager.azurewebsites.net/api/user/1"
+          method="delete"
+          header="file"
+          enctype="multipart/form-data"
+        >
+          <input type="submit" value="Delete" />
+        </form>
       </div>
     );
   }

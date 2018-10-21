@@ -5,12 +5,15 @@ import NavBar from "./NavBar";
 import SearchBar from "./SearchBar";
 
 class Main extends Component {
-  state = {};
+  // state = {
+  //   upload: []
+  // };
   render() {
     return (
       <div>
         <h3>Buttons Component:</h3>
         <Buttons />
+        {/* <Buttons upload={this.props.upload} /> */}
         <br />
         <br />
         <br />
