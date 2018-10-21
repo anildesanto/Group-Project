@@ -9,10 +9,34 @@ class Main extends Component {
   render() {
     return (
       <div>
+        <h3>Buttons Component:</h3>
         <Buttons />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <h3>Info Bar Component:</h3>
         <InfoBar />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <h3>Nav Bar Component:</h3>
         <NavBar />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <h3>Search Bar Component:</h3>
         <SearchBar />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
     );
   }
