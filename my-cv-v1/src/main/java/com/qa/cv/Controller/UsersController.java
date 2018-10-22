@@ -47,6 +47,17 @@ public class UsersController {
 		}).orElseThrow(() -> new ResourceNotFoundException("Department", "id", usersDataModel));
 	}
 
+	// Method to update role
+	@PutMapping("/department/{departmentId}/user/{userId}")
+	public UsersDataModel updateUserDepartment(@PathVariable(value = "departmentId") Long departmentId, @PathVariable(value = "userId") Long userId) 
+	{
+		UsersDataModel userModel = userRepository.findById(userId).get();
+		return departmentRepository.findById(departmentId).map(departmentModel -> {
+			userModel.setDepartment(departmentModel);
+			return  userRepository.save(userModel);
+		}).orElseThrow(() -> new ResourceNotFoundException("Department", "id", userModel));
+	}
+		
 	// Method to get a user
 	@GetMapping("/user/{userId}")
 	public UsersDataModel getUserByUserId(@PathVariable(value = "userId") Long userId, Pageable pageable) {

@@ -69,9 +69,7 @@ public class CvController {
 				cvModel.setFileName(file.getOriginalFilename());
 				cvModel.setFileType(file.getContentType());
 				cvModel.setUser(userModel);
-				SerialBlob b = new SerialBlob(file.getBytes());
-				cvModel.setCvLink(b);
-			
+				cvModel.setCvLink(new SerialBlob(file.getBytes()));
 			} catch (IOException | SQLException e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
@@ -118,8 +116,6 @@ public class CvController {
 			, @PathVariable(value = "status") String status) throws SerialException, SQLException {
 		CvModel cvModel = cvRepository.findById(cvId).get();
 		cvModel.setStatus(status);
-		//SerialBlob b = new SerialBlob(cvModel.getCvLink().getBytes(1l, (int) cvModel.getCvLink().length()));
-		//cvModel.setCvLink(b);
 		return cvRepository.save(cvModel);
 	}
 	// Method to remove a user
