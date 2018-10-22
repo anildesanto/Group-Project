@@ -5,15 +5,16 @@ import NavBar from "./NavBar";
 import SearchBar from "./SearchBar";
 
 class Main extends Component {
-  // state = {
-  //   upload: []
-  // };
+  state = {
+    userId: "1",
+    cvId: "12"
+  };
   render() {
     return (
       <div>
         <h3>Buttons Component:</h3>
-        <Buttons />
-        {/* <Buttons upload={this.props.upload} /> */}
+        {/* <Buttons upload={(userId = "1")} /> */}
+        <Buttons userId={this.props.userId} cvId={this.props.cvId} />
         <br />
         <br />
         <br />
