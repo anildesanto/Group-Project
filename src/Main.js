@@ -2,6 +2,7 @@ import React from 'react';
 //import Searchbar from './Searchbar.js'
 //import Table from './Table.js'
 import LogIn from './LogIn.js'
+import LogOut from './LogOut.js'
 import User from './User.js'
 // import './App.css';
 import { Route, NavLink, HashRouter } from "react-router-dom";
@@ -93,10 +94,14 @@ class Main extends React.Component {
             <li>
               <NavLink to="/login">LogIn</NavLink>
             </li>
+            {/* <li>
+              <NavLink to="/logout">LogOut</NavLink>
+            </li> */}
           </ul>
           <div className="content">
             <Route exact path="/user" component={User} />
             <Route path="/login" component={LogIn} />
+            {/* <Route path="/logout" component={LogOut} /> */}
           </div>
         </div>
       </HashRouter>

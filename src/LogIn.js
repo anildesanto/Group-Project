@@ -70,7 +70,6 @@ export default class LogIn extends Component {
   }
   render() {
 
-    if(this.state.loggedIn === false){
     return (
       <div className="formGroup">
         <h2 id="loginTitle">Log in</h2>
@@ -109,21 +108,7 @@ export default class LogIn extends Component {
       
     )
     }
-  else if (this.state.loggedIn === true){
-    return(
-
-       <HashRouter>
-        <div>
-
-            <Route exact path="/user" component={User} />
-
-        </div>
-      </HashRouter>
-
-    );
-  }
     
   }
-}
 
 
