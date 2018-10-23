@@ -44,7 +44,6 @@ public class DeptIntegrationTest {
 	@Before
 	public void clearDB() {
 		MyCvV1ApplicationTests.counter++;
-		test = report.startTest("Department Integration Testing " + MyCvV1ApplicationTests.counter);
 		departmentRepo.deleteAll();
 	}
 	
@@ -57,7 +56,7 @@ public class DeptIntegrationTest {
 	@Test
 	public void findingADepartmentFromDatabase() throws Exception 
 	{
-		test.log(LogStatus.INFO, "Finding A Department From Database Test");
+		test = report.startTest("Finding A Department From Database Test");
 		test.log(LogStatus.INFO, "Created a Department With the Name 'Big Boss'");
 		departmentRepo.save(new DepartmentModel("Big Boss"));
 		String id = mvc.perform(get("/api/department").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse().getContentAsString();
@@ -79,7 +78,7 @@ public class DeptIntegrationTest {
 	
 	@Test
 	public void addDepartmentToDatabase() throws Exception{
-		test.log(LogStatus.INFO, "Adding a Department To Database Test");
+		test = report.startTest( "Adding a Department To Database Test");
 		
 		test.log(LogStatus.INFO, "Attempt to add the Department 'Big Boss'");
 		mvc.perform(MockMvcRequestBuilders.post("/api/department")
@@ -99,7 +98,7 @@ public class DeptIntegrationTest {
 	
 	@Test
 	public void editADepartmentInTheDatabase() throws Exception{
-		test.log(LogStatus.INFO, "Editing A Department In The Database");
+		test = report.startTest(  "Editing A Department In The Database");
 		departmentRepo.save(new DepartmentModel("Big Boss"));
 		test.log(LogStatus.INFO, "Created a Department With the Name 'Big Boss'");
 		String id = mvc.perform(get("/api/department").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse().getContentAsString();
@@ -122,7 +121,7 @@ public class DeptIntegrationTest {
 	
 	@Test
 	public void deleteADepartmentFromTheDatabase() throws Exception{
-		test.log(LogStatus.INFO, "Deleting A Department From The Database");
+		test = report.startTest( "Deleting A Department From The Database");
 		departmentRepo.save(new DepartmentModel("Big Boss"));
 		test.log(LogStatus.INFO, "Created a Department With the Name 'Big Boss'");
 		String id = mvc.perform(get("/api/department").contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse().getContentAsString();
@@ -142,7 +141,7 @@ public class DeptIntegrationTest {
 	
 	@Test
 	public void findingAllDepartmentsFromDatabase() throws Exception 	{
-		test.log(LogStatus.INFO, "Finding All Departments From Database");
+		test = report.startTest( "Finding All Departments From Database");
 		departmentRepo.save( new DepartmentModel("Big Boss"));
 		test.log(LogStatus.INFO, "Created a Department With the Name 'Big Boss'");
 		mvc.perform(MockMvcRequestBuilders.post("/api/department")
