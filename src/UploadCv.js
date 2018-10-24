@@ -20,8 +20,8 @@ class UploadCv extends Component {
                 });
                 req.then(response => {
                     this.handleCV(e);
-                    cvFile.value = null;
                 })
+                cvFile.value = null;
             }
         }
     }
