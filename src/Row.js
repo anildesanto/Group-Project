@@ -19,7 +19,6 @@ class Row extends React.Component {
     axios.get(`https://qacvmanager.azurewebsites.net/api/user/${this.props.userId}/cv`)
       .then(response => {
         this.props.onClick(response.data);
-        console.log(response.data);
       })
   };
   render() {

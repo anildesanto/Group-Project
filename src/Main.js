@@ -36,51 +36,17 @@ class Main extends React.Component {
     console.log("Reset CVs to " + info);
   }
 
-  componentDidMount() {
-    //   let request = new XMLHttpRequest();
-    //   request.open("GET", "https://qacvmanager.azurewebsites.net/api/user/");
-    //   request.setRequestHeader('Content-Type', 'application/json');
-    //   request.setRequestHeader('Access-Control-Allow-Origin', '*');
-    //   request.responseType = 'json';
-    //   request.send();
-
-    //   request.onload = () => {
-    //     this.setState({ rows: request.response });
-    //   }
-    // axios.get(`https://qacvmanager.azurewebsites.net/api/user/${this.state.userId}/cv`)
-    //   .then(response => {
-    //     this.setState({ cvs: response.data});
-    //     console.log(response.data);
-    //   })
-    // let request2 = new XMLHttpRequest();
-    // request2.open("GET", "https://qacvmanager.azurewebsites.net/api/user/${this.state.userId}/cv");
-    // request2.setRequestHeader('Content-Type', 'application/json');
-    // request2.setRequestHeader('Access-Control-Allow-Origin', '*');
-    // request2.responseType = 'json';
-    // request2.send();
-    // request2.onload = () => {
-    //   this.setState({ cvs: request2.response });
-    // }
-  }
   logIn = (userInfo) => {
     this.setState(prevState => ({
       loginInfo: userInfo
     }));
   }
+  refreshCV = () => {
+    this.setState(prevState => ({
+    }));
+  }
 
   render() {
-    // if (this.state.loggedIn) {
-    //   return (
-    //     <div>
-    //       {/* <Searchbar onSubmit={this.findCv} /> */}
-    //       <Table rows={this.state.rows} cvs={this.state.cvs} onClick={this.resetCV} />
-    //     </div>
-    //   );
-    // } else {
-    //   return (
-    //     <LogIn onSubmit={this.logIn} loginInfo={this.state.loginInfo}/>
-    //   );
-    // }
     return (
       <HashRouter>
         <div>
@@ -96,7 +62,10 @@ class Main extends React.Component {
           <div className="content">
             {/* <Route exact path="/user" component={User} /> */}
             <Route exact path="/login" render={(props) => <LogIn {...props} onSubmit={this.logIn} loginInfo={this.state.loginInfo} />} />
-            <Route path='/user' render={(props) => <User {...props} loginInfo={this.state.loginInfo} rows={this.state.rows} cvs={this.state.cvs} resetCV={this.resetCV} findUser={this.findUser} findCv={this.findCv} />} />
+            <Route path='/user' render={(props) => <User {...props} 
+            loginInfo={this.state.loginInfo} rows={this.state.rows} 
+            cvs={this.state.cvs} resetCV={this.resetCV} findUser={this.findUser} 
+            findCv={this.findCv} />} />
           </div>
         </div>
       </HashRouter>

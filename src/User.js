@@ -39,20 +39,20 @@ class User extends React.Component {
             firstName={this.props.loginInfo[1]}
             lastName={this.props.loginInfo[2]}
             role={this.props.loginInfo[5]} />
-          <Buttons userId={this.props.loginInfo[1]} />
-          <CVTable cvs={this.props.cvs} onClick={this.resetCV} />
+          <Buttons userId={this.props.loginInfo[0]} />
+          <CVTable viewerId= {this.props.loginInfo[4]} cvs={this.props.cvs} onClick ={this.props.findCv} visibility={this.state.visibility}  />
         </div>
       );
     } else if (this.props.loginInfo[4] === 2) {
       return (
-        <div id="trainer">
+        <div id="trainer" >
           <InfoBar userId={this.props.loginInfo[1]}
             firstName={this.props.loginInfo[1]}
             lastName={this.props.loginInfo[2]}
             role={this.props.loginInfo[5]} />
           <SearchUser onSubmit={this.props.findUser} />
           <UserTable rows={this.props.rows} onClick={this.props.findCv} cvs={this.props.cvs} />
-          <CVTable cvs={this.props.cvs} onClick={this.props.resetCV} visibility={this.state.visibility} />
+          <CVTable viewerId= {this.props.loginInfo[4]} cvs={this.props.cvs} onClick ={this.props.findCv} visibility={this.state.visibility} />
           {/* <SearchCV onSubmit={this.props.findCv}/> */}
 
         </div>
@@ -68,7 +68,7 @@ class User extends React.Component {
 
           <SearchUser onSubmit={this.props.findUser} />
           <UserTable rows={this.props.rows} />
-          <CVTable cvs={this.props.cvs} onClick={this.props.resetCV} />
+          <CVTable viewerId= {this.props.loginInfo[4]} cvs={this.props.cvs} onClick ={this.props.findCv} visibility={this.state.visibility} />
           <SearchCV onSubmit={this.props.findCv} />
 
         </div>
@@ -84,7 +84,7 @@ class User extends React.Component {
 
           <SearchUser onSubmit={this.props.findUser} />
           <UserTable rows={this.props.rows} />
-          <CVTable cvs={this.props.cvs} onClick={this.props.resetCV} />
+          <CVTable viewerId= {this.props.loginInfo[4]} cvs={this.props.cvs} onClick ={this.props.findCv} visibility={this.state.visibility} />
           <SearchCV onSubmit={this.props.findCv} />
 
         </div>
@@ -99,7 +99,7 @@ class User extends React.Component {
           />
           <SearchUser onSubmit={this.props.findUser} />
           <UserTable rows={this.props.rows} />
-          <CVTable cvs={this.props.cvs} onClick={this.props.resetCV} />
+          <CVTable viewerId= {this.props.loginInfo[4]} cvs={this.props.cvs} onClick ={this.props.findCv} visibility={this.state.visibility}  />
           <SearchCV onSubmit={this.props.findCv} />
 
         </div>
@@ -114,7 +114,7 @@ class User extends React.Component {
           />
           <SearchUser onSubmit={this.props.findUser} />
           <UserTable rows={this.props.rows} />
-          <CVTable cvs={this.props.cvs} onClick={this.props.resetCV} />
+          <CVTable viewerId= {this.props.loginInfo[4]} cvs={this.props.cvs} onClick ={this.props.findCv} visibility={this.state.visibility} />
           <SearchCV onSubmit={this.props.findCv} onClick={this.changeVisibility} />
 
         </div>
