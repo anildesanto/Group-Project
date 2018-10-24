@@ -14,7 +14,7 @@ class Row extends React.Component {
 
   handleCV = (event) => {
     event.preventDefault();
-    console.log("New CVS:", this.props.userId);
+    //console.log("New CVS:", this.props.userId);
     this.setState({ color: '#AAAAAA' });
     axios.get(`https://qacvmanager.azurewebsites.net/api/user/${this.props.userId}/cv`)
       .then(response => {

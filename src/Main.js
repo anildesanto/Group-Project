@@ -3,17 +3,13 @@ import LogIn from './LogIn.js'
 import User from './User.js'
 import { Route, NavLink, HashRouter } from "react-router-dom";
 import axios from 'axios'
+// import "./style/index2.css";
 
 class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       loginInfo: [],
-      // "userId": 0,
-      // "firstName": "",
-      // "lastName": "",
-      // "email": "",
-      // "department": ""
       cvs: [],
       rows: []
     };
@@ -33,9 +29,7 @@ class Main extends React.Component {
     this.setState(prevState => ({
       cvs: info
     }));
-    console.log("Reset CVs to " + info);
   }
-
   logIn = (userInfo) => {
     this.setState(prevState => ({
       loginInfo: userInfo
@@ -54,14 +48,11 @@ class Main extends React.Component {
             <li>
               <NavLink exact to="/user">User</NavLink>
             </li>
-            <li>
-              <NavLink exact to="/login">Log in</NavLink>
-            </li>
-
           </ul>
           <div className="content">
+           
             {/* <Route exact path="/user" component={User} /> */}
-            <Route exact path="/login" render={(props) => <LogIn {...props} onSubmit={this.logIn} loginInfo={this.state.loginInfo} />} />
+            <Route exact path="/" render={(props) => <LogIn {...props} onSubmit={this.logIn} loginInfo={this.state.loginInfo} />} />
             <Route path='/user' render={(props) => <User {...props} 
             loginInfo={this.state.loginInfo} rows={this.state.rows} 
             cvs={this.state.cvs} resetCV={this.resetCV} findUser={this.findUser} 

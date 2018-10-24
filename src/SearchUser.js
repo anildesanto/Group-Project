@@ -5,11 +5,11 @@ class SearchUser extends React.Component {
   state = {  userName: '' }
   handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Search Event: onSubmit", this.state.userName);
+    //console.log("Search Event: onSubmit", this.state.userName);
     axios.get(`https://qacvmanager.azurewebsites.net/api/findbyname/${this.state.userName}&`)
       .then(response => {
         this.props.onSubmit(response.data);
-        console.log(response.data);
+        //console.log(response.data);
       })
   };
   

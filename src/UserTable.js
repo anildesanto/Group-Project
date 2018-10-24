@@ -22,8 +22,6 @@ class UserTable extends React.Component {
                                
                                 </tr> </thead>
                                 {this.props.rows.map(row => <Row key={row.userId} onClick={this.props.onClick} cvs={this.props.cvs} prevId={this.state.prevId} {...row} />)}
-                            
-
                         </table>
                     </div>
         );

@@ -7,18 +7,13 @@ class CreateAccount extends React.Component
    event.preventDefault();
    if(window.confirm("Confirm Account Creation"))
    {
-       console.log("Creating Account");
        var department  = document.getElementById("selectDpt");
-       console.log("Dpt ID: "+ department.value);
 
        var firstName  = document.getElementById("firstName");
-       console.log("First Name: "+ firstName.value);
 
        var lastName  = document.getElementById("lastName");
-       console.log("Nast Name: "+ lastName.value);
 
        var email  = document.getElementById("email");
-       console.log("Email: "+ email.value);
        axios.post("https://qacvmanager.azurewebsites.net/api/department/"+department.value+ "/user",
        {
            "firstName" : firstName.value,
@@ -29,7 +24,6 @@ class CreateAccount extends React.Component
        firstName.value ="";
        lastName.value ="";
        email.value ="";
-       console.log("Account Created!");
    }
  };
  render() {

@@ -6,11 +6,11 @@ class SearchCV extends React.Component {
 
   handleCV = (event) => {
     event.preventDefault();
-    console.log("CV Event: onSubmitCV", this.state.userId);
+    //console.log("CV Event: onSubmitCV", this.state.userId);
     axios.get(`https://qacvmanager.azurewebsites.net/api/user/${this.state.userId}/cv`)
       .then(response => {
         this.props.onSubmit(response.data);
-        console.log(response.data);
+        //console.log(response.data);
       })
   };
   render() {

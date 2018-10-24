@@ -1,8 +1,12 @@
 import React from 'react';
 import Cvrow from './Cvrow.js'
-
+import UploadCv from './UploadCv.js'
 class CVTable extends React.Component {
 
+     constructor(props) {
+        super(props);
+        //console.log(""+ this.props.loginInfo[0]);
+     }
       state = { userName: '', userId: '', prevId: '' }
     handleReset = (event) => {
         var empty = [];
@@ -13,6 +17,7 @@ class CVTable extends React.Component {
     render() {
         return (
             <div className="tableRight" style={{ visibility: this.props.visibility }}>
+            <UploadCv onClick={this.props.onClick} userId={this.props.loginInfo[0]} viewerId = {this.props.viewerId}/>
                 {/* <button onClick={this.handleReset}>Back</button> */}
                 <table className="table" id="cvTable">
                     <thead>

@@ -13,30 +13,38 @@ export default class LogIn extends Component {
       password: "",
     };
   }
-
+componentDidMount()
+{
+    this.passField = document.getElementById("loginPasswordfield");
+    this.emailField = document.getElementById("loginEmailField");
+    this.emailField.focus();
+}
 
   onSubmit = (e) => {
     e.preventDefault()
     axios.get(`https://qacvmanager.azurewebsites.net/api/login/${this.state.email}&${this.state.password}`)
       .then(
         response => {
-          console.log(response.data[0])
+          //console.log(response.data[0])
           if (response.status === 200) {
-            console.log("Login Sucessful");
+            //console.log("Login Sucessful");
             this.props.loginInfo.push(response.data[0].userId);
             this.props.loginInfo.push(response.data[0].firstName);
             this.props.loginInfo.push(response.data[0].lastName);
             this.props.loginInfo.push(response.data[0].email);
             this.props.loginInfo.push(response.data[0].department.departmentId);
             this.props.loginInfo.push(response.data[0].department.role);
-            console.log(this.props.loginInfo[4]);
+            //console.log(this.props.loginInfo[4]);
 
             this.props.onSubmit(this.props.loginInfo);
             window.location.replace("#/user");
           }
         })
       .catch((error) => {
-        console.log(error)
+        window.alert("Invalid Details");
+        this.passField.value = "";
+        this.emailField.value = "";
+         this.emailField.focus();
       })
   }
   getEmail = (e) => {
@@ -47,7 +55,6 @@ export default class LogIn extends Component {
   hashPass = (e) => {
     e.preventDefault();
     this.setState({
-      // [e.target.name]: CryptoJS.MD5(e.target.value).toString()
       [e.target.name]: e.target.value
     })
   }
@@ -56,7 +63,7 @@ export default class LogIn extends Component {
       <div id="login-page">
         <h2 id="loginTitle">Login to continue</h2>
         <div className="form">
-          <div className="login-form">
+          <form className="login-form" onSubmit={e => this.onSubmit(e)}>
             <label
               id="loginEmailLabel"
               htmlFor="email">Email </label>
@@ -83,14 +90,14 @@ export default class LogIn extends Component {
               value={this.state.passwordInput}
               onChange={e => this.hashPass(e)} />
             <br />
-            <button
+            <button type = "submit"
               id="btnLogin"
               className="button"
-              onClick={e => this.onSubmit(e)}>
+              >
               login
             </button>
             <p className="message">Forgot password? <a href="">Reset password.</a></p>
-          </div>
+          </form>
         </div>
       </div>
     );

@@ -28,8 +28,6 @@ class Cvrow extends Component
 
    handleCV = (event) => {
     event.preventDefault();
-    console.log("Reloaded:", this.props.user.userId);
-    this.setState({ color: '#AAAAAA' });
     axios.get(`https://qacvmanager.azurewebsites.net/api/user/${this.props.user.userId}/cv`)
       .then(response => {
         this.props.onClick(response.data);

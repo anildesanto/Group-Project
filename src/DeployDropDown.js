@@ -11,7 +11,7 @@ class DeployDropDown extends React.Component {
        this.setStatusSelector = element =>
        {
            this.statusSelector = element;
-          console.log("Element : " +element);
+          //console.log("Element : " +element);
        }
        this.updateStatus = (e) =>
        {
@@ -28,7 +28,7 @@ class DeployDropDown extends React.Component {
     console.log("CV Event: onSubmitCV", this.statusSelector.value);
     axios.get(`https://qacvmanager.azurewebsites.net/api/department/${this.statusSelector.value}/user`)
       .then(response => {
-        console.log(response.data);
+        //console.log(response.data);
         this.props.onChange(response.data);
       })
   };
