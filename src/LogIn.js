@@ -32,8 +32,7 @@ export default class LogIn extends Component {
             console.log(this.props.loginInfo[4]);
 
             this.props.onSubmit(this.props.loginInfo);
-            window.location.replace("http://localhost:3000/#/user");
-            // window.location.replace("http://localhost:3000/user#/user");
+            window.location.replace("#/user");
           }
         })
       .catch((error) => {

@@ -122,8 +122,7 @@ class User extends React.Component {
     } else {
       return (
         <div id="noDep">
-          <h1><a href="http://localhost:3000/#/login">Please log in.</a></h1>
-
+          <h1><a href="#/login">Please log in.</a></h1>
         </div>
       );
     }
