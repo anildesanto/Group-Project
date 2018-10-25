@@ -11,7 +11,7 @@ class UploadCv extends Component {
            var formData = new FormData();
             var cvFile = document.querySelector('#file');
             formData.append("file", cvFile.files[0]);
-            if (window.confirm("Confirm Status")) {
+            if (window.confirm("Confirm Upload")) {
                var req = axios.post(setPostLink, formData,
                 {
                   headers: {
