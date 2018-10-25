@@ -50,7 +50,6 @@ class Main extends React.Component {
             </li>
           </ul>
           <div className="content">
-           
             {/* <Route exact path="/user" component={User} /> */}
             <Route exact path="/" render={(props) => <LogIn {...props} onSubmit={this.logIn} loginInfo={this.state.loginInfo} />} />
             <Route path='/user' render={(props) => <User {...props} 

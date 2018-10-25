@@ -9,6 +9,7 @@ state = {toHome: false}
     handleSubmit = (event) => {
         event.preventDefault();
           window.location.assign("#/")
+          window.location.reload("#/")
     }
 
     render() {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
-//import CryptoJS from "crypto-js";
+import CryptoJS from "crypto-js";
 
 
 
@@ -55,7 +55,8 @@ componentDidMount()
   hashPass = (e) => {
     e.preventDefault();
     this.setState({
-      [e.target.name]: e.target.value
+      // [e.target.name]: e.target.value
+      [e.target.name]: CryptoJS.MD5(e.target.value).toString()
     })
   }
   render() {
@@ -72,7 +73,7 @@ componentDidMount()
               id="loginEmailField"
               className="loginForm"
               name="email"
-              type="text"
+              type="email"
               placeholder="Enter email"
               value={this.state.email}
               onChange={e => this.getEmail(e)} />

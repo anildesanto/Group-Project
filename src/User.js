@@ -9,6 +9,7 @@ import DeployDropDown from './DeployDropDown.js'
 import axios from 'axios'
 import LogOut from './LogOut.js'
 import FilterFlag from './FilterFlag.js'
+import CreateAccount from './CreateAccount.js'
 
 
 class User extends React.Component {
@@ -67,6 +68,7 @@ class User extends React.Component {
             <LogOut/>
             <UserTable rows={this.props.rows} onClick={this.props.findCv} cvs={this.props.cvs} />
             <CVTable loginInfo= {this.props.loginInfo} viewerId= {this.props.loginInfo[4]} cvs={this.props.cvs} onClick ={this.props.findCv} visibility={this.state.visibility} />
+            <CreateAccount viewerId= {this.props.loginInfo[4]} />
           </div>
         );
     }  
