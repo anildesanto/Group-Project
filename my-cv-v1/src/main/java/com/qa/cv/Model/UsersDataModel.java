@@ -1,6 +1,7 @@
 package com.qa.cv.Model;
 
 import java.io.Serializable;
+import java.sql.Blob;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -9,8 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.sql.rowset.serial.SerialBlob;
 import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.OnDelete;
@@ -39,6 +42,11 @@ public class UsersDataModel implements Serializable {
 
 	@NotBlank
 	private String password;
+	
+	@Lob
+	private SerialBlob picture;
+	
+	private String prefLocation;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "departmentId", nullable = false)
@@ -51,11 +59,13 @@ public class UsersDataModel implements Serializable {
 	}
 
 	public UsersDataModel(String firstName, String lastName, String email, String password,
-			DepartmentModel department) {
+			DepartmentModel department, SerialBlob picture, String prefLocation) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
+		this.picture = picture;
+		this.prefLocation = prefLocation;
 	}
 	public Long getUserId() {
 		return userId;
@@ -109,4 +119,21 @@ public class UsersDataModel implements Serializable {
 		return departmentId.getDepartmentId();
 	}
 
+	public SerialBlob getPicture() {
+		return picture;
+	}
+
+	public void setPicture(SerialBlob picture) {
+		this.picture = picture;
+	}
+
+	public String getPrefLocation() {
+		return prefLocation;
+	}
+
+	public void setPrefLocation(String prefLocation) {
+		this.prefLocation = prefLocation;
+	}
+
+	
 }

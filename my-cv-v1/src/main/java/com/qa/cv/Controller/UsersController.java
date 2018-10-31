@@ -139,6 +139,8 @@ public class UsersController {
 			user.setLastName(userRequest.getLastName());
 			user.setEmail(userRequest.getEmail());
 			user.setPassword(userRequest.getPassword());
+			user.setPicture(userRequest.getPicture());
+			user.setPrefLocation(user.getPrefLocation());
 			return userRepository.save(user);
 		}).orElseThrow(() -> new ResourceNotFoundException("User", "id", userRequest));
 	}

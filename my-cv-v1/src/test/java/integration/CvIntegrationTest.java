@@ -1,4 +1,4 @@
-package integration;
+/*package integration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -283,3 +283,4 @@ public class CvIntegrationTest {
 		}
 	
 }
+*/
