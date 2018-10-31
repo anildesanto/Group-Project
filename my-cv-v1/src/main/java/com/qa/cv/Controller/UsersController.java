@@ -70,13 +70,31 @@ public class UsersController {
 	public List<UsersDataModel> getAllUsersByName(@PathVariable(value = "name") String name,
 			@PathVariable(value = "lastName") String lastName, Pageable pageable) {
 
-		List<UsersDataModel> user = userRepository.findAll();
+		List<UsersDataModel> user = userRepository.findAll().stream().filter((u) -> 
+		{
+			if(u.getDepartmentId() == 1 ||u.getDepartmentId() == 6)
+			{
+				return true;
+			}
+			return false;
+		}).collect(Collectors.toList());;
 		user = user.stream().filter(u -> {
 			if (u.getFirstName().toLowerCase().startsWith(name.toLowerCase()) 
 					&& u.getLastName().toLowerCase().startsWith(lastName.toLowerCase())) {
 				return true;
 			}
+			if (u.getDepartment().getRole().toLowerCase().startsWith(name.toLowerCase()) 
+					&& u.getDepartment().getRole().toLowerCase().startsWith(lastName.toLowerCase())) {
+				return true;
+			}
+			
 			if (lastName.equals("")) {
+				if (u.getEmail().toLowerCase().startsWith(name.toLowerCase())) {
+					return true;
+				}
+				if (u.getDepartment().getRole().toLowerCase().startsWith(name.toLowerCase())) {
+					return true;
+				}
 
 				if (u.getFirstName().toLowerCase().startsWith(name.toLowerCase()) 
 						|| u.getLastName().toLowerCase().startsWith(name.toLowerCase())) {
@@ -90,14 +108,14 @@ public class UsersController {
 
 	// Method to get user with email and password (Log in)
 	@GetMapping("/login/{email}&{password}")
-	public Page<UsersDataModel> getAllUsersByEmail(@PathVariable(value = "email") String email,
+	public List<UsersDataModel> getAllUsersByEmail(@PathVariable(value = "email") String email,
 			@PathVariable(value = "password") String password, Pageable pageable) {
 
 		Page<UsersDataModel> user = userRepository.findByEmail(email, pageable);
 		if (!user.getContent().get(0).getPassword().toString().equals(password)) {
 			throw new ResourceNotFoundException(email, email, null);
 		}
-		return user;
+		return user.getContent();
 	}
 
 	// Method to Get all Users in a given department

@@ -27,7 +27,6 @@ public class DepartmentModel implements Serializable {
 	public DepartmentModel() {
 
 	}
-
 	public DepartmentModel(String role) {
 		this.role = role;
 	}

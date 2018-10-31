@@ -13,9 +13,9 @@ import com.qa.cv.Model.CvModel;
 @RestController
 public class WelcomeController 
 {
-	@GetMapping("/")
-	public String getMain ()
-	{
-		return "Welcome to QACvs!";
-	}
+//	@GetMapping("/")
+//	public String getMain ()
+//	{
+//		return "Welcome to QACvs!";
+//	}
 }

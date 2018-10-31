@@ -9,6 +9,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.rowset.serial.SerialBlob;
@@ -95,8 +96,15 @@ public class CvController {
 	}
 	// Method to Get all Cvs for a given user
 	@GetMapping("/user/{userId}/cv")
-	public Page<CvModel> getAllCvsByUserId(@PathVariable(value = "userId") UsersDataModel userId, Pageable pageable) {
-		return cvRepository.findByUserId(userId, pageable);
+	public List<CvModel> getAllCvsByUserId(@PathVariable(value = "userId") UsersDataModel userId, Pageable pageable) {
+		return cvRepository.findByUserId(userId, pageable).stream().filter((cv) -> 
+		{
+			if(cv.getUser().getDepartmentId() == 1 ||cv.getUser().getDepartmentId() == 6)
+			{
+				return true;
+			}
+			return false;
+		}).collect(Collectors.toList());
 	}
 	
 	// Method to Get all Cvs
@@ -107,18 +115,18 @@ public class CvController {
 	
 	// Method to Get all Cvs with a given status
 	@GetMapping("/cv/status/{status}")
-	public Page<CvModel> getAllcvByStatus(@PathVariable(value = "status") String status, Pageable pageable){
-		return cvRepository.findByStatus(status, pageable);
+	public List<CvModel> getAllcvByStatus(@PathVariable(value = "status") String status, Pageable pageable){
+		return cvRepository.findByStatus(status, pageable).getContent();
 	}
 	// Method to set status/flag of cv 
-	@PutMapping("/cv/{cvId}/status/{status}")
-	public CvModel updateCv(@PathVariable(value = "cvId") Long cvId
+	@GetMapping("/cv/{cvId}/status/{status}")
+	public void updateCv(@PathVariable(value = "cvId") Long cvId
 			, @PathVariable(value = "status") String status) throws SerialException, SQLException {
 		CvModel cvModel = cvRepository.findById(cvId).get();
 		cvModel.setStatus(status);
-		return cvRepository.save(cvModel);
+		cvRepository.save(cvModel);
 	}
-	// Method to remove a user
+	// Method to remove a cv
 	@DeleteMapping("/cv/{cvId}")
 	public ResponseEntity<?> deleteCv(@PathVariable(value = "cvId") Long cvId) {
 		return cvRepository.findById(cvId).map(cv -> {
@@ -126,5 +134,20 @@ public class CvController {
 			return ResponseEntity.ok().build();
 		}).orElseThrow(() -> new ResourceNotFoundException("CV", "id", null));
 	}
+	// Method to remove a cv via link
+	@GetMapping("/cv/{cvId}/delete")
+	public void deleteCvViaLink(@PathVariable(value = "cvId") Long cvId) {
+		cvRepository.delete(cvRepository.findById(cvId).get());
+	}
+//	// Method to Edit a user
+//	@PutMapping("/cv/{cvId}")
+//	public CvModel updateUser(@PathVariable(value = "cvId") Long cvId, @Valid @RequestBody CvModel cvModel) {
+//		return cvRepository.findById(cvId).map(cv -> {
+//			cv.setFileName(cvModel.getFileName());
+//			cv.setFileType(cvModel.getFileType());
+//			cv.setStatus("Gray");
+//			return cvRepository.save(cv);
+//		}).orElseThrow(() -> new ResourceNotFoundException("User", "id", cvModel));
+//	}
 
 }
