@@ -2,9 +2,13 @@ package com.qa.cv.Controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.stream.Collectors;
-
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
+import javax.activation.*; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -64,7 +68,6 @@ public class UsersController {
 		return userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("UserModel", "id", userId));
 	}
-	
 	// Method to get a user by name
 	@GetMapping("findbyname/{name}&{lastName}")
 	public List<UsersDataModel> getAllUsersByName(@PathVariable(value = "name") String name,
@@ -129,6 +132,16 @@ public class UsersController {
 	@GetMapping("/user")
 	public List<UsersDataModel> getAlluser() {
 		return userRepository.findAll();
+	}
+	@GetMapping("/email/{email}")
+	public List<UsersDataModel> findUserByEmail(@PathVariable(value = "email") String email) {
+		return userRepository.findAll().stream().filter((user)->
+		{
+			if(user.getEmail().toLowerCase().equals(email.toLowerCase()))
+				return true;
+			else
+				return false;
+		}).collect(Collectors.toList());
 	}
 
 	// Method to Edit a user
