@@ -1,5 +1,8 @@
 package com.qa.cv.Controller;
 
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -7,12 +10,19 @@ import java.util.stream.Collectors;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 import javax.validation.Valid;
-import javax.activation.*; 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.activation.*;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,8 +33,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.qa.cv.Exceptions.ResourceNotFoundException;
+import com.qa.cv.Model.CvModel;
 import com.qa.cv.Model.DepartmentModel;
 import com.qa.cv.Model.UsersDataModel;
 import com.qa.cv.Repositories.DepartmentRepository;
@@ -61,7 +73,39 @@ public class UsersController {
 			return  userRepository.save(userModel);
 		}).orElseThrow(() -> new ResourceNotFoundException("Department", "id", userModel));
 	}
-		
+	// Method to Post a Cv
+		@PostMapping("/user/{userId}/picture")
+		@Consumes(MediaType.MULTIPART_FORM_DATA_VALUE)
+		public UsersDataModel uploadPicture(@PathVariable(value = "userId") Long userId,
+				@FormParam ("file") MultipartFile file){
+			return userRepository.findById(userId).map(userModel -> {
+				try {
+					userModel.setPicture(new SerialBlob(file.getBytes()));
+				} catch (IOException | SQLException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
+				return userRepository.save(userModel);
+			}).orElseThrow(() -> new ResourceNotFoundException("User", "id", null));
+		}
+		// Method to Get a Cv
+		@GetMapping("/user/{userId}/picture/download")
+		public byte[] downloadCv(HttpServletResponse response, @PathVariable(value = "userId") Long userId) throws IOException, SQLException {
+			Optional<UsersDataModel> user = userRepository.findById(userId);
+			UsersDataModel userModel = user.get();
+			return userModel.getPicture().getBytes(1l, (int) userModel.getPicture().length());
+		}
+		// Method to set status/flag of cv 
+		@PutMapping("/user/{userId}/prefLocation/{location}")
+		public UsersDataModel updateCv(@PathVariable(value = "userId") Long userId
+				, @PathVariable(value = "location") String prefLocation){
+			return userRepository.findById(userId).map(userModel -> {
+					userModel.setPrefLocation(prefLocation);
+					userRepository.save(userModel);
+					return userRepository.save(userModel);
+			}).orElseThrow(() -> new ResourceNotFoundException("User", "id", null));
+		}
+	
 	// Method to get a user
 	@GetMapping("/user/{userId}")
 	public UsersDataModel getUserByUserId(@PathVariable(value = "userId") Long userId, Pageable pageable) {
@@ -153,9 +197,17 @@ public class UsersController {
 			user.setEmail(userRequest.getEmail());
 			user.setPassword(userRequest.getPassword());
 			user.setPicture(userRequest.getPicture());
-			user.setPrefLocation(user.getPrefLocation());
+			user.setPrefLocation(userRequest.getPrefLocation());
 			return userRepository.save(user);
 		}).orElseThrow(() -> new ResourceNotFoundException("User", "id", userRequest));
+	}
+	// Method to Edit a user
+	@PutMapping("/user/{userId}/updatePassword/{pass}")
+	public UsersDataModel updatePassword(@PathVariable(value = "userId") Long userId, @PathVariable(value = "pass") String newPass) {
+		return userRepository.findById(userId).map(user -> {
+			user.setPassword(newPass);
+			return userRepository.save(user);
+		}).orElseThrow(() -> new ResourceNotFoundException("User", "id", null));
 	}
 
 	// Method to remove a user

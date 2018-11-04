@@ -58,16 +58,16 @@ public class CvController {
 	DepartmentRepository departmentRepository;
 
 	// Method to Post a Cv
-	@PostMapping("/user/{userId}/upload")
+	@PostMapping("/user/{userId}/upload/{fileName}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA_VALUE)
-	public CvModel addCv(@PathVariable(value = "userId") Long userId,
+	public CvModel addCv(@PathVariable(value = "fileName") String fileName,@PathVariable(value = "userId") Long userId,
 			UsersDataModel usersDataModel, @FormParam ("file") MultipartFile file){
 		CvModel cvModel = new CvModel();
 		return userRepository.findById(userId).map(userModel -> {
 			
 			cvModel.setStatus("Gray");
 			try {
-				cvModel.setFileName(file.getOriginalFilename());
+				cvModel.setFileName(fileName);
 				cvModel.setFileType(file.getContentType());
 				cvModel.setUser(userModel);
 				cvModel.setCvLink(new SerialBlob(file.getBytes()));
